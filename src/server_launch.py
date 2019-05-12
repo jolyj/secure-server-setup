@@ -7,7 +7,7 @@ import certificate
 
 app = Flask(__name__)
 
-# GET request route to get the signed Certificate
+# GET request endpoint to get the signed Certificate
 # Parameters are : country, StateName, organizationName, organizationUnitName,
 #                  commonName, locality
 @app.route('/generation', methods=['GET'])
@@ -24,8 +24,8 @@ def generate_cert():
     response = certificate.generate("./generate_certificates", country, stateName, organizationName, organizationUnitName, commonName, locality)
 
     # response is composed of the signed certificate by the server and a key
-    return Response(response)
+    return response
 
 if __name__ == "__main__":
-    # Launnch server on 127.0.0.1:5000
+    # Launch server on 127.0.0.1:5000
     app.run()

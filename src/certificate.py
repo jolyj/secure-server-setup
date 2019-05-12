@@ -7,6 +7,7 @@ from time import gmtime, mktime
 from os.path import exists, join
 import rsa
 from Crypto.PublicKey import RSA
+from flask import Response, jsonify
 
 # This function open and return a certificate written in a file. It is used to load the server certificate.
 def load_server_certificate(path):
@@ -94,7 +95,9 @@ def generate(path, country, stateName, organizationName, organizationUnitName, c
 
     # if fail return a false success
     if (res == None):
-        return ("{" + "success: false" + "}")
+        resp = jsonify("{" + "success: false" + "}")
+        resp.status_code = 417
+        return resp
     else:
         # open the certificate and key generated
         cert_file = open(path + "/" + organizationName + "_" + commonName + "_" + country + ".crt", "rt")
@@ -102,4 +105,6 @@ def generate(path, country, stateName, organizationName, organizationUnitName, c
         # get the certificate and the key and dump them in a json response
         cert = cert_file.read()
         key = key_file.read()
-        return ("{" + "success: true" + "\ncert:" + cert + "\nkey: " + key + "}")
+        resp = jsonify("{" + "success: true" + "\ncert:" + cert + "\nkey: " + key + "}")
+        resp.status_code = 201
+        return resp
